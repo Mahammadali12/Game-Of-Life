@@ -19,6 +19,9 @@ void getMouseClick();
 
 // gcc main.c -g -o main -Wall -Wextra -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
+// https://www.raylib.com/cheatsheet/cheatsheet.html
+// game states - choosing grid or starting simulation
+
 int main(void)
 {
     InitWindow(WIDTH, HEIGHT, "Conway's Game of Life - Raylib C17");
@@ -26,7 +29,7 @@ int main(void)
 
     while (!WindowShouldClose())
     {
-        getMouseClick();
+        // getMouseClick();
         update();
         BeginDrawing();
             ClearBackground(BLACK);
@@ -47,13 +50,9 @@ void draw()
             if(grid[i][j] == 1)
             {
                 DrawRectangle(i * squareLength, j * squareLength, squareLength, squareLength, WHITE);
-            } 
-            if((i+j) % 2 == 0)
+            }else
             {
-                DrawRectangleLines(i * squareLength, j * squareLength, squareLength, squareLength, DARKGRAY);
-            } else
-            {
-                DrawRectangleLines(i * squareLength, j * squareLength, squareLength, squareLength, BLACK);
+                DrawRectangle(i * squareLength, j * squareLength, squareLength, squareLength, BLACK);
             }
         }
     }
@@ -61,20 +60,17 @@ void draw()
 
 void update()
 {
-    // for (int i = 0; i < WIDTH_L; i++)
-    // {
-    //     for (int j = 0; j < HEIGHT_L; j++)
-    //     {
-    //         if( (i + j) % 2 == 0)
-    //         {
-    //             grid[i][j] = 1;
-    //         }
-    //         // else
-    //         // {
-    //         //     grid[i][j] = 0;
-    //         // }   
-    //     }
-    // }
+    switch (state)
+    {
+    case "Choosing Grid":
+        getMouseClick();
+        break;
+    case "Simulating":
+        // Simulation logic here
+        break;
+    default:
+        break;
+    }
 }
 
 void getMouseClick()
