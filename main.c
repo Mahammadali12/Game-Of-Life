@@ -2,6 +2,8 @@
 #include <raylib.h>
 #include <raymath.h>
 #include <stdlib.h>
+#include <string.h>
+
 
 #define WIDTH 800
 #define HEIGHT 600
@@ -13,8 +15,8 @@
 
 #define UPDATE_INTERVAL 0.5 //ms
 
-int grid[WIDTH_L][HEIGHT_L];
-int successorGrid[WIDTH_L][HEIGHT_L];
+// int grid[WIDTH_L][HEIGHT_L];
+// int successorGrid[WIDTH_L][HEIGHT_L];
 
 enum GameState { ChoosingGrid, Simulating } state = ChoosingGrid;
 
@@ -22,6 +24,12 @@ void update();
 void draw();
 void getMouseClick();
 void simulate();
+void init();
+
+
+int ** grid;
+int ** successorGrid;
+
 
 // gcc main.c -g -o main -Wall -Wextra -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
@@ -34,7 +42,7 @@ int main(void)
     InitWindow(WIDTH, HEIGHT, "Conway's Game of Life - Raylib C17");
     SetTargetFPS(60);
 
-
+    init();
 
     while (!WindowShouldClose())
     {
@@ -51,6 +59,22 @@ int main(void)
 
     CloseWindow();
     return 0;
+}
+
+void init()
+{
+    grid = malloc(sizeof(int*) * WIDTH_L);
+    successorGrid = malloc(sizeof(int*) * WIDTH_L);
+
+    for (int i = 0; i < WIDTH_L; i++)
+    {
+        grid[i] = malloc( sizeof(int) * HEIGHT_L);
+        memset(grid[i],0, sizeof(int) * HEIGHT_L);
+
+        successorGrid[i] = malloc( sizeof(int) * HEIGHT_L);
+        memset(successorGrid[i],0, sizeof(int) * HEIGHT_L);
+    }
+    
 }
 
 
