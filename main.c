@@ -74,7 +74,6 @@ void init()
         successorGrid[i] = malloc( sizeof(int) * HEIGHT_L);
         memset(successorGrid[i],0, sizeof(int) * HEIGHT_L);
     }
-    
 }
 
 
@@ -98,7 +97,6 @@ void draw()
 
 void update()
 {
-
     switch (state)
     {
     case ChoosingGrid:
@@ -106,17 +104,16 @@ void update()
         getMouseClick();
         break;
     case Simulating:
-        printf("SIMULATING\n");
         if(total_time >= UPDATE_INTERVAL)
         {
+            printf("SIMULATING\n");
             simulate();
             total_time = 0.0;
         }
         break;
     default:
         break;
-    }
-    
+    }   
 }
 
 void getMouseClick()
@@ -141,14 +138,20 @@ void getMouseClick()
 
 void simulate()
 {
-
-    for (int i = 0; i < WIDTH_L; i++)
+    for (int i = 0; i < WIDTH_L - 1; i++)
     {
-        for (int j = 0; j < HEIGHT; j++)
+        for (int j = 0; j < HEIGHT_L - 1; j++)
         {
-            //apply logic 
+            if(grid[i][j] == 1)
+            {
+                successorGrid[i+1][j+1] = 1;
+            }
             
         }
     }
+
+    int ** temp = grid;
+    grid = successorGrid;
+    successorGrid = temp;
 
 }
