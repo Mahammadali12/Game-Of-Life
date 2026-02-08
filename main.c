@@ -9,7 +9,7 @@
 #define HEIGHT 600
 
 // Physics / units
-#define squareLength  20              // pixels per meter (tune to taste)
+#define squareLength  10              // pixels per meter (tune to taste)
 #define WIDTH_L  (WIDTH / squareLength)
 #define HEIGHT_L (HEIGHT / squareLength)
 
@@ -25,6 +25,7 @@ void draw();
 void getMouseClick();
 void simulate();
 void init();
+int countNeighbours(int x, int y);
 
 
 int ** grid;
@@ -106,7 +107,7 @@ void update()
     case Simulating:
         if(total_time >= UPDATE_INTERVAL)
         {
-            printf("SIMULATING\n");
+            // printf("SIMULATING\n");
             simulate();
             total_time = 0.0;
         }
@@ -142,9 +143,16 @@ void simulate()
     {
         for (int j = 0; j < HEIGHT_L - 1; j++)
         {
+            int active_neighbours = countNeighbours(i,j);
             if(grid[i][j] == 1)
             {
-                successorGrid[i+1][j+1] = 1;
+                // successorGrid[i+1][j+1] = 1;
+                if(active_neighbours < 2) successorGrid[i][j] = 0;
+                else if (active_neighbours == 2 || active_neighbours == 3) successorGrid[i][j] = 1;
+                else successorGrid[i][j] = 0;
+            }else
+            {
+                if(active_neighbours == 3) successorGrid[i][j] = 1;
             }
             
         }
@@ -154,4 +162,26 @@ void simulate()
     grid = successorGrid;
     successorGrid = temp;
 
+}
+
+int countNeighbours(int x, int y)
+{
+    int cnt = 0;
+
+    // if(grid[][])
+    // printf("CHECKING %d-%d\n",x,y);
+    for (int i = x-1; i < x+2; i++)
+    {
+        for (int j = y-1; j < y+2; j++)
+        {
+            if(i>=0 && j>=0 && i<WIDTH_L && j<HEIGHT_L)
+            {
+                if ((i!=x || j!=y) && grid[i][j] == 1 )
+                {
+                    cnt++;
+                }
+            }
+        }        
+    }
+    return cnt;
 }
