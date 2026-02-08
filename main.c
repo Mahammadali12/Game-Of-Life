@@ -11,25 +11,37 @@
 #define WIDTH_L  (WIDTH / squareLength)
 #define HEIGHT_L (HEIGHT / squareLength)
 
+#define UPDATE_INTERVAL 0.5 //ms
+
 int grid[WIDTH_L][HEIGHT_L];
+int successorGrid[WIDTH_L][HEIGHT_L];
+
+enum GameState { ChoosingGrid, Simulating } state = ChoosingGrid;
 
 void update();
 void draw();
 void getMouseClick();
+void simulate();
 
 // gcc main.c -g -o main -Wall -Wextra -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
 
 // https://www.raylib.com/cheatsheet/cheatsheet.html
-// game states - choosing grid or starting simulation
 
+double total_time = 0.0;
+double delta_time;
 int main(void)
 {
     InitWindow(WIDTH, HEIGHT, "Conway's Game of Life - Raylib C17");
     SetTargetFPS(60);
 
+
+
     while (!WindowShouldClose())
     {
-        // getMouseClick();
+        delta_time = GetFrameTime();
+        total_time += delta_time;
+        // printf("%f\n",delta_time);
+
         update();
         BeginDrawing();
             ClearBackground(BLACK);
@@ -40,6 +52,8 @@ int main(void)
     CloseWindow();
     return 0;
 }
+
+
 
 void draw()
 {
@@ -60,17 +74,25 @@ void draw()
 
 void update()
 {
+
     switch (state)
     {
-    case "Choosing Grid":
+    case ChoosingGrid:
+        printf("reading input\n");
         getMouseClick();
         break;
-    case "Simulating":
-        // Simulation logic here
+    case Simulating:
+        printf("SIMULATING\n");
+        if(total_time >= UPDATE_INTERVAL)
+        {
+            simulate();
+            total_time = 0.0;
+        }
         break;
     default:
         break;
     }
+    
 }
 
 void getMouseClick()
@@ -86,5 +108,23 @@ void getMouseClick()
             grid[gridX][gridY] = 1 - grid[gridX][gridY]; // Toggle cell state
         }
     }
+
+    if(IsKeyPressed(KEY_ENTER))
+    {
+        state = Simulating;
+    }
 }
 
+void simulate()
+{
+
+    for (int i = 0; i < WIDTH_L; i++)
+    {
+        for (int j = 0; j < HEIGHT; j++)
+        {
+            //apply logic 
+            
+        }
+    }
+
+}
