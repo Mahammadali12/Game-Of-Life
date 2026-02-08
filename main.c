@@ -9,7 +9,7 @@
 #define HEIGHT 600
 
 // Physics / units
-#define squareLength  10              // pixels per meter (tune to taste)
+#define squareLength  15              // pixels per meter (tune to taste)
 #define WIDTH_L  (WIDTH / squareLength)
 #define HEIGHT_L (HEIGHT / squareLength)
 
@@ -77,8 +77,6 @@ void init()
     }
 }
 
-
-
 void draw()
 {
     for (int i = 0; i < WIDTH_L; i++)
@@ -139,9 +137,9 @@ void getMouseClick()
 
 void simulate()
 {
-    for (int i = 0; i < WIDTH_L - 1; i++)
+    for (int i = 0; i < WIDTH_L; i++)
     {
-        for (int j = 0; j < HEIGHT_L - 1; j++)
+        for (int j = 0; j < HEIGHT_L; j++)
         {
             int active_neighbours = countNeighbours(i,j);
             if(grid[i][j] == 1)
@@ -153,6 +151,7 @@ void simulate()
             }else
             {
                 if(active_neighbours == 3) successorGrid[i][j] = 1;
+                else successorGrid[i][j] = 0;
             }
             
         }
